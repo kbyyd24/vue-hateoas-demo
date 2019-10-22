@@ -16,9 +16,10 @@ export default {
 
 <style>
 #weibo-item-box {
-    width: 80%;
-    margin: auto;
-    border-color: gray;
-    border-style: solid;
+  width: 80%;
+  margin: auto;
+  margin-top: 10px;
+  border-color: gray;
+  border-style: solid;
 }
 </style>

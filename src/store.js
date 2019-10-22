@@ -17,7 +17,13 @@ export default new Store({
         getHomePage(context, userId) {
             axios.get('http://localhost:8080/home', { headers: { 'X-USER-ID': userId } })
                 .then(response => context.commit('updateHomePage', response.data))
-                .catch(err => alert(err))
+                .catch(err => console.log(err))/* eslint-disable-line */
+        },
+        postWeibo(context, { userId, content }) {
+            console.log(content)/* eslint-disable-line */
+            axios.post('http://localhost:8080/weibos', { content }, { headers: { 'X-USER-ID': userId } })
+                .then(() => context.dispatch('getHomePage', userId))
+                .catch(err => console.log(err))/* eslint-disable-line */
         }
     }
 })
