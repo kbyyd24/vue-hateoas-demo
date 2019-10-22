@@ -14,8 +14,8 @@ export default new Store({
         }
     },
     actions: {
-        getHomePage(context) {
-            axios.get('http://localhost:8080/home')
+        getHomePage(context, userId) {
+            axios.get('http://localhost:8080/home', { headers: { 'X-USER-ID': userId } })
                 .then(response => context.commit('updateHomePage', response.data))
                 .catch(err => alert(err))
         }
