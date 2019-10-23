@@ -7,7 +7,7 @@
     <div id="refresh">
       <button @click="refresh(userId)">refresh</button>
     </div>
-    <PostWeibo v-bind:userId="userId"/>
+    <PostWeibo v-if="userId" v-bind:userId="userId"/>
     <WeiboListItem v-for="(weibo) in weiboList" :key="weibo.id" :weibo="weibo" />
   </div>
 </template>

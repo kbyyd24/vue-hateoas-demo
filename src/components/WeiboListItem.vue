@@ -3,6 +3,7 @@
     <div id="weibo-item-box">
       <div id="owner-name">{{ weibo.owner.name }}</div>
       <div id="weibo-content">{{ weibo.content }}</div>
+      <div id="like-count">点赞数：{{ weibo.likedCount }}</div>
     </div>
   </div>
 </template>
