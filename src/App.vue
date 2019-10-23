@@ -1,24 +1,27 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HomePage/>
+    <img alt="Vue logo" src="./assets/logo.png" />
+    <UserId />
+    <HomePage />
   </div>
 </template>
 
 <script>
-import HomePage from './components/HomePage.vue';
+import HomePage from "./components/HomePage.vue";
+import UserId from "./components/UserId.vue";
 
 export default {
-  name: 'app',
+  name: "app",
   components: {
-    HomePage
+    HomePage,
+    UserId
   }
-}
+};
 </script>
 
 <style>
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
