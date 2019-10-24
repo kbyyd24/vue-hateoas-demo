@@ -9,13 +9,19 @@
 <script>
 import HomePage from "./components/HomePage.vue";
 import UserId from "./components/UserId.vue";
+import VueRouter from "vue-router";
+
+const routes = [{ path: "/", component: HomePage }];
+
+const router = new VueRouter({ routes });
 
 export default {
   name: "app",
   components: {
     HomePage,
     UserId
-  }
+  },
+  router
 };
 </script>
 
