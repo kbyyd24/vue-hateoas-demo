@@ -2,6 +2,8 @@
 
 Demo about consume `HATEOAS` service by Vue.js. See the service [here](https://github.com/kbyyd24/spring-hateoas-demo)
 
+You can checkout to tag `hateoas` and `crud` to see the different between using `HATEOAS` service and `CRUD` service. 
+
 ## Project setup
 ```
 yarn install
