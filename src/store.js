@@ -46,9 +46,10 @@ export default new Store({
 const buildHeaders = (userId) => {
     if (userId && userId.trimLeft().trimRight() != '') {
         return {
-            'X-USER-ID': userId
+            'X-USER-ID': userId,
+            'Accept': 'application/hal+json'
         }
     } else {
-        return {}
+        return { 'Accept': 'application/hal+json' }
     }
 }
