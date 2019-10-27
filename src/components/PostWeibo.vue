@@ -4,7 +4,7 @@
       <textarea id="content-input" cols="30" rows="10" v-model="content"></textarea>
     </div>
     <div id="post">
-      <button id="post-button" @click="post( content)">post</button>
+      <button id="post-button" @click="post({url: postWeiboUrl, content})">post</button>
     </div>
   </div>
 </template>
@@ -14,6 +14,7 @@ import { mapActions } from "vuex";
 
 export default {
   name: "PostWeibo",
+  props: ["postWeiboUrl"],
   data: () => {
     return {
       content: ""

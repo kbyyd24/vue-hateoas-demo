@@ -3,7 +3,7 @@
     <div id="refresh">
       <button @click="refresh()">refresh</button>
     </div>
-    <PostWeibo v-if="userId" />
+    <PostWeibo v-if="postWeiboUrl" :postWeiboUrl="postWeiboUrl" />
     <WeiboListItem v-for="(weibo) in weiboList" :key="weibo.id" :weibo="weibo" />
   </div>
 </template>
@@ -17,7 +17,14 @@ export default {
   name: "HomePage",
   computed: mapState({
     weiboList: state => state.weibos.weiboListItems,
-    userId: state => state.userId
+    postWeiboUrl: state =>
+      state.weibos
+        ? state.weibos._links
+          ? state.weibos._links.postWeibo
+            ? state.weibos._links.postWeibo.href
+            : undefined
+          : undefined
+        : undefined
   }),
   methods: {
     ...mapActions({

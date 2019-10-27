@@ -28,10 +28,10 @@ export default new Store({
                 .then(response => context.commit('updateHomePage', response.data))
                 .catch(err => console.log(err))/* eslint-disable-line */
         },
-        postWeibo(context, content) {
+        postWeibo(context, {url, content}) {
             console.log(content);/* eslint-disable-line */
             const headers = buildHeaders(context.state.userId)
-            axios.post('http://localhost:8080/weibos', { content }, { headers })
+            axios.post(url, { content }, { headers })
                 .then(() => context.dispatch('getHomePage'))
                 .catch(err => console.log(err))/* eslint-disable-line */
         },
