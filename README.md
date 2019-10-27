@@ -1,5 +1,7 @@
 # hateoas-vue-demo
 
+Demo about consume `HATEOAS` service by Vue.js. See the service [here](https://github.com/kbyyd24/spring-hateoas-demo)
+
 ## Project setup
 ```
 yarn install
