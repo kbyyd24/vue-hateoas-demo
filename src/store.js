@@ -7,7 +7,8 @@ Vue.use(Vuex);
 export default new Store({
     state: {
         weibos: {},
-        userId: ''
+        userId: '',
+        currentWeibo: {}
     },
     mutations: {
         saveUserId(state, userId) {
@@ -15,20 +16,53 @@ export default new Store({
         },
         updateHomePage(state, data) {
             state.weibos = data
+        },
+        saveCurrentWeibo(state, data) {
+            state.currentWeibo = data
         }
     },
     actions: {
         getHomePage(context) {
-            let headers = buildHeaders(context.state.userId)
+            const headers = buildHeaders(context.state.userId)
             axios.get('http://localhost:8080/home', { headers })
                 .then(response => context.commit('updateHomePage', response.data))
                 .catch(err => console.log(err))/* eslint-disable-line */
         },
         postWeibo(context, content) {
             console.log(content);/* eslint-disable-line */
-            let headers = buildHeaders(context.state.userId)
+            const headers = buildHeaders(context.state.userId)
             axios.post('http://localhost:8080/weibos', { content }, { headers })
                 .then(() => context.dispatch('getHomePage'))
+                .catch(err => console.log(err))/* eslint-disable-line */
+        },
+        getWeiboDetail(context, weiboId) {
+            const headers = buildHeaders(context.state.userId)
+            return axios.get(`http://localhost:8080/weibos/${weiboId}`, { headers })
+                .then(response => context.commit('saveCurrentWeibo', response.data))
+                .catch(err => console.log(err))/* eslint-disable-line */
+        },
+        editWeibo(context, { weiboId, content }) {
+            const headers = buildHeaders(context.state.userId)
+            return axios.post(`http://localhost:8080/weibos/${weiboId}`, { content }, { headers })
+                .then(() => context.dispatch('getWeiboDetail', weiboId))
+                .catch(err => console.log(err))/* eslint-disable-line */
+        },
+        deleteWeibo(context, weiboId) {
+            const headers = buildHeaders(context.state.userId)
+            return axios.delete(`http://localhost:8080/weibos/${weiboId}`, { headers })
+                .then(() => context.dispatch('getHomePage'))
+                .catch(err => console.log(err))/* eslint-disable-line */
+        },
+        likeWeibo(context, weiboId) {
+            const headers = buildHeaders(context.state.userId)
+            axios.post(`http://localhost:8080/weibos/${weiboId}/like`, {}, { headers })
+                .then(() => context.dispatch('getWeiboDetail', weiboId))
+                .catch(err => console.log(err))/* eslint-disable-line */
+        },
+        dislikeWeibo(context, weiboId) {
+            const headers = buildHeaders(context.state.userId)
+            axios.post(`http://localhost:8080/weibos/${weiboId}/cancel-like`, {}, { headers })
+                .then(() => context.dispatch('getWeiboDetail', weiboId))
                 .catch(err => console.log(err))/* eslint-disable-line */
         }
     }

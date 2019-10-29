@@ -2,23 +2,26 @@
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png" />
     <UserId />
-    <HomePage />
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 import HomePage from "./components/HomePage.vue";
 import UserId from "./components/UserId.vue";
+import WeiboDetail from "./components/WeiboDetail.vue";
 import VueRouter from "vue-router";
 
-const routes = [{ path: "/", component: HomePage }];
+const routes = [
+  { path: "/", component: HomePage },
+  { path: "/weibos/:id", component: WeiboDetail }
+];
 
 const router = new VueRouter({ routes });
 
 export default {
   name: "app",
   components: {
-    HomePage,
     UserId
   },
   router
