@@ -4,22 +4,18 @@
       <div id="weibo-detail-owner">{{ detail.owner.name }} :</div>
       <div id="weibo-detail-content">{{ detail.content }}</div>
       <div id="weibo-detail-operation">
-        <button class="weibo-detail-button" @click="refresh(detail.id)">Refresh</button>
-        <button class="weibo-detail-button" @click="edit()">Edit</button>
-        <button class="weibo-detail-button" @click="deleteThis()">Delete</button>
+        <button class="weibo-detail-button" @click="refresh()">Refresh</button>
+        <button v-if="detail._links.edit" class="weibo-detail-button" @click="edit()">Edit</button>
+        <button v-if="detail._links.delete" class="weibo-detail-button" @click="deleteThis()">Delete</button>
       </div>
       <div id="weibo-detail-reaction-container">
         <div id="weibo-reaction">
+          <button v-if="detail._links.like" class="weibo-reactoin-button" @click="like()">Like</button>
           <button
+            v-if="detail._links.cancelLike"
             class="weibo-reactoin-button"
-            v-if="!hasLiked()"
-            @click="likeWeibo(detail.id)"
-          >Like</button>
-          <button
-            class="weibo-reactoin-button"
-            v-if="hasLiked()"
-            @click="dislikeWeibo(detail.id)"
-          >Dislike</button>
+            @click="cancelLike()"
+          >Cancel like</button>
         </div>
         <div>
           Liked By:
@@ -39,7 +35,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapMutations } from "vuex";
 
 export default {
   name: "WeiboDetail",
@@ -54,33 +50,44 @@ export default {
     userId: state => state.userId
   }),
   methods: {
-    ...mapActions(["deleteWeibo", "likeWeibo", "dislikeWeibo"]),
-    ...mapActions({
-      refresh: "getWeiboDetail"
-    }),
+    ...mapActions(["get", "post", "delete", "getHomePage"]),
+    ...mapMutations(["saveCurrentWeibo"]),
+    refresh() {
+      this.get(this.detail._links.self.href)
+        .then(response => this.saveCurrentWeibo(response.data))
+        .catch(err => alert(err));
+    },
     edit() {
       this.editing = true;
       this.editingContent = this.detail.content;
     },
     save() {
-      const weiboId = this.detail.id;
-      const content = this.editingContent;
-      this.$store
-        .dispatch("editWeibo", { weiboId, content })
-        .then(() => (this.editing = false));
+      this.post({
+        url: this.detail._links.edit.href,
+        data: { content: this.editingContent }
+      })
+        .then(this.refresh)
+        .then(() => (this.editing = false))
+        .catch(err => alert(err));
     },
     deleteThis() {
-      const weiboId = this.detail.id;
-      this.$store
-        .dispatch("deleteWeibo", weiboId)
+      this.delete(this.detail._links.delete.href)
+        .then(() => this.getHomePage())
         .then(() => this.$router.go(-1));
     },
-    hasLiked() {
-      return (
-        this.detail.likedBy
-          .map(user => user.id)
-          .filter(id => id === this.userId).length !== 0
-      );
+    like() {
+      this.postAndRefresh(this.detail._links.like.href);
+    },
+    cancelLike() {
+      this.postAndRefresh(this.detail._links.cancelLike.href);
+    },
+    postAndRefresh(url) {
+      this.post({
+        url,
+        data: {}
+      })
+        .then(this.refresh)
+        .catch(err => alert(err));
     }
   }
 };

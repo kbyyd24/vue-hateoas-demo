@@ -4,14 +4,12 @@
       <textarea id="content-input" cols="30" rows="10" v-model="content"></textarea>
     </div>
     <div id="post">
-      <button id="post-button" @click="post({url: postWeiboUrl, content})">post</button>
+      <button id="post-button" @click="postWeibo()">post</button>
     </div>
   </div>
 </template>
 
 <script>
-import { mapActions } from "vuex";
-
 export default {
   name: "PostWeibo",
   props: ["postWeiboUrl"],
@@ -21,9 +19,16 @@ export default {
     };
   },
   methods: {
-    ...mapActions({
-      post: "postWeibo"
-    })
+    postWeibo() {
+      const content = this.content;
+      this.$store
+        .dispatch("post", {
+          url: this.postWeiboUrl,
+          data: { content }
+        })
+        .then(() => this.$store.dispatch("getHomePage"))
+        .catch(err => alert(err));
+    }
   }
 };
 </script>

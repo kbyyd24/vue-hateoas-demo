@@ -9,16 +9,18 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapActions, mapMutations } from "vuex";
 export default {
   name: "WeiboListItem",
   props: ["weibo"],
   methods: {
-    ...mapActions(["getWeiboDetail"]),
+    ...mapActions(["get"]),
+    ...mapMutations(["saveCurrentWeibo"]),
     goToDetail() {
-      this.getWeiboDetail(this.weibo.id).then(() =>
-        this.$router.push(`/weibos/${this.weibo.id}`)
-      );
+      this.get(this.weibo._links.self.href)
+        .then(response => this.saveCurrentWeibo(response.data))
+        .then(() => this.$router.push(`/weibos/${this.weibo.id}`))
+        .catch(err => alert(err));
     }
   }
 };
